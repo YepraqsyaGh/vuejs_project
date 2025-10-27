@@ -1,0 +1,13 @@
+# Exclude dependencies folder
+node_modules
+
+# Ignore npm logs
+npm-debug.log
+
+# Ignore Git files and settings
+.git
+.gitignore
+
+# Exclude project documentation and environment file
+README.md
+.env
