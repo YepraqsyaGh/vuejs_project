@@ -22,7 +22,6 @@
       </div>
       <UserTable :users="users" />
     </div>
-
   </div>
 </template>
 
@@ -34,8 +33,7 @@ import { useRoute, useRouter } from 'vue-router'
 import type { LocationQueryValue } from 'vue-router'
 import { Params } from '@/types';
 
-
-import UserTable from './UserTable.vue';
+import UserTable from './user/UserTable.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -73,7 +71,7 @@ const debouncedFilter = useDebounceFn(async (filtersObj: Params) => {
     queryParams.email = filtersObj.email
   }
 
-// Update the URL query params without reloading the page
+  // Update the URL query params without reloading the page
   router.replace({
     path: route.path,
     query: queryParams

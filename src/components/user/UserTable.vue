@@ -35,45 +35,16 @@
             <td class="px-6 py-4">{{ user.address.city }}</td>
             <td class="px-6 py-4">
               <button class="bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 sm:px-8 sm:py-1 rounded-sm"
-                @click="toggle(user.id)">
-                {{ isOpen(user.id) ? 'Hide' : 'Show' }}
+                @click="toggleModal(user)">
+                Show
               </button>
-            </td>
-          </tr>
-
-          <tr v-if="isOpen(user.id)">
-            <td colspan="5">
-              <div class="bg-gray-100 px-8 py-4">
-                <p><strong class="text-sm">City:</strong> {{ user.name }}</p>
-                <p><strong class="text-sm">Username:</strong> {{ user.username }}</p>
-                <p><strong class="text-sm">Email:</strong> {{ user.email }}</p>
-                <p><strong class="text-sm">Phone:</strong> {{ user.phone }}</p>
-                <p><strong class="text-sm">Website:</strong> {{ user.website }}</p>
-                <div class="mt-5">
-                  <p><strong class="text-sm">Address:</strong>
-                    {{ user.address.suite }},
-                    {{ user.address.street }} str.,
-                    {{ user.address.city }} City,
-                  </p>
-                  <p><strong class="text-sm">Zipcode:</strong> {{ user.address.zipcode }}</p>
-                  <p><strong class="text-sm">GL:</strong> {{ user.address.geo.lat }} {{ user.address.geo.lng }}</p>
-                </div>
-
-                <div class="mt-5">
-                  <p><strong class="text-sm">Company: </strong>
-                    {{ user.company.name }},
-                  </p>
-                  <p class="ml-4">{{ user.company.catchPhrase }}</p>
-                  <p class="ml-4">{{ user.company.bs }}</p>
-                </div>
-
-              </div>
             </td>
           </tr>
         </template>
 
       </tbody>
     </table>
+    <UserModal :isOpen="isOpen" :modalData="modalData"  @toggle="toggleModal" />
   </div>
 </template>
 
@@ -82,24 +53,25 @@ import { ref, computed } from 'vue'
 import { useStore } from 'vuex';
 import { User } from '@/types/users'
 
+import UserModal from './UserModal.vue';
+
+
 const store = useStore();
 
 // Computed getters from Vuex store
 const isLoading = computed(() => store.getters.isLoading);
 
-// Reactive set to track which rows are open
-const openRows = ref<Set<number>>(new Set())
+// Modal open/close state
+const isOpen = ref(false)
 
-// Function to toggle the open state of a row
-const toggle = (id: number) => {
-  if (openRows.value.has(id)) {
-    openRows.value.delete(id)
-  } else {
-    openRows.value.add(id)
-  }
+// User data shown in the modal
+const modalData = ref<User | null>(null)
+
+// Toggles the modal open or closed.
+function toggleModal(user?: User) {
+  isOpen.value = !isOpen.value
+  modalData.value = isOpen.value ? user ?? null : null
 }
-// Helper function to check if a row is currently open
-const isOpen = (id: number) => openRows.value.has(id)
 
 // Props definition for the component
 defineProps({
